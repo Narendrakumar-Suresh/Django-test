@@ -1,12 +1,21 @@
 from django.db import models
 from django.utils.text import slugify
 
+
+#Category
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     image_url = models.URLField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)  # Allow blank slugs(this make it more efficient)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         if not self.slug:  # Only generate slug if it's not already set da
@@ -20,3 +29,4 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+

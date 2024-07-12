@@ -1,6 +1,9 @@
+from blog.models import Category
 from blog.models import Post
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
+import random
+
 
 class Command(BaseCommand):
     # help = 'This comands inserts post data'
@@ -78,6 +81,9 @@ class Command(BaseCommand):
             "https://picsum.photos/id/20/800/400",
         ]
 
+        categories = Category.objects.all()
+
         for title, content, image_url in zip(titles, contents, img_urls_list):
-            Post.objects.create(title=title, content=content, image_url=image_url)
+            category = random.choice(categories)
+            Post.objects.create(title=title, content=content, image_url=image_url, category=category)
         self.stdout.write(self.style.SUCCESS("Completed insterting data."))
